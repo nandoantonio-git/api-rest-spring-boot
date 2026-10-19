@@ -27,6 +27,22 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role perfil;
 
+    private Boolean ativo = true;
+
+    public Usuario(Long id, String login, String senha, Role perfil) {
+        this(id, login, senha, perfil, true);
+    }
+
+    public void atualizarInformacoes(String login, String senha, Role perfil) {
+        if (login != null && !login.isBlank()) this.login = login;
+        if (senha != null && !senha.isBlank()) this.senha = senha;
+        if (perfil != null) this.perfil = perfil;
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + perfil.name()));
@@ -59,6 +75,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return Boolean.TRUE.equals(ativo);
     }
 }

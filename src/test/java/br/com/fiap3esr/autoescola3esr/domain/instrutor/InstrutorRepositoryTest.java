@@ -4,6 +4,7 @@ import br.com.fiap3esr.autoescola3esr.application.core.domain.Instrucao;
 import br.com.fiap3esr.autoescola3esr.application.core.domain.Aluno;
 import br.com.fiap3esr.autoescola3esr.shared.vo.endereco.Endereco;
 import br.com.fiap3esr.autoescola3esr.shared.vo.enumeration.Especialidade;
+import br.com.fiap3esr.autoescola3esr.shared.vo.enumeration.MotivoCancelamento;
 import br.com.fiap3esr.autoescola3esr.application.core.domain.Instrutor;
 import br.com.fiap3esr.autoescola3esr.application.port.out.InstrutorRepository;
 import br.com.fiap3esr.autoescola3esr.adapter.out.repository.InstrutorRepositoryImpl;
@@ -86,6 +87,30 @@ public class InstrutorRepositoryTest {
         assertThat(instrutorDisponivel).isEqualTo(instrutor);
     }
 
+    @Test
+    @DisplayName("Expectativa: Retornar instrutor quando a instrução no horário foi cancelada.")
+    void escolherInstrutorAleatorioDisponivelCenario3() {
+        LocalDateTime proximaSegundaAs10 = LocalDateTime
+                .now()
+                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+                .withHour(10)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+
+        Aluno aluno = cadastarAluno();
+        Instrutor instrutor = cadastrarInstrutor();
+        Instrucao instrucao = agendarInstrucao(aluno, instrutor, proximaSegundaAs10);
+        instrucao.cancelar(MotivoCancelamento.ALUNO_DESISTIU);
+        testEntity.flush();
+
+        Instrutor instrutorDisponivel = repository.escolherInstrutorAleatorioDisponivel(
+                Especialidade.MOTOS,
+                proximaSegundaAs10
+        );
+        assertThat(instrutorDisponivel).isEqualTo(instrutor);
+    }
+
     private Endereco dadosEndereco() {
         return new Endereco(
                 "Rua Teste",
@@ -127,7 +152,7 @@ public class InstrutorRepositoryTest {
         return instrutor;
     }
 
-    private void agendarInstrucao(
+    private Instrucao agendarInstrucao(
             Aluno aluno,
             Instrutor instrutor,
             LocalDateTime dataHora) {
@@ -138,5 +163,6 @@ public class InstrutorRepositoryTest {
                 dataHora
         );
         testEntity.persist(instrucao);
+        return instrucao;
     }
 }

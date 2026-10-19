@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 public class GlobalExceptionHandler {
     @ExceptionHandler({EntityNotFoundException.class,
             br.com.fiap3esr.autoescola3esr.exception.type.AlunoNotFoundException.class,
-            br.com.fiap3esr.autoescola3esr.exception.type.InstrutorNotFoundException.class})
+            br.com.fiap3esr.autoescola3esr.exception.type.InstrutorNotFoundException.class,
+            br.com.fiap3esr.autoescola3esr.exception.type.UsuarioNotFoundException.class})
     public ResponseEntity<Void> tratarNotFound() {
         return ResponseEntity.notFound().build();
     }

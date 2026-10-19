@@ -17,7 +17,7 @@ public class ValidadorConflitoHorarioInstrutor implements ValidadorAgendamento {
         if (dados.idInstrutor() == null) {
             return;
         }
-        boolean instrutorOcupado = repository.existsByInstrutorIdAndDataHora(
+        boolean instrutorOcupado = repository.existsByInstrutorIdAndDataHoraAndMotivoCancelamentoIsNull(
                 dados.idInstrutor(),
                 dados.dataHora()
         );

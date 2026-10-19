@@ -1,0 +1,10 @@
+package br.com.fiap3esr.autoescola3esr.adapter.in.controller.response.usuario;
+
+import br.com.fiap3esr.autoescola3esr.application.core.domain.Usuario;
+import br.com.fiap3esr.autoescola3esr.shared.vo.enumeration.Role;
+
+public record DadosDetalhamentoUsuario(Long id, String login, Role perfil, Boolean ativo) {
+    public DadosDetalhamentoUsuario(Usuario usuario) {
+        this(usuario.getId(), usuario.getLogin(), usuario.getPerfil(), usuario.getAtivo());
+    }
+}

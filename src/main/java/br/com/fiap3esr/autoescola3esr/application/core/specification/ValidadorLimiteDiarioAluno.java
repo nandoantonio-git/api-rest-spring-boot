@@ -19,7 +19,7 @@ public class ValidadorLimiteDiarioAluno implements ValidadorAgendamento {
         LocalDateTime inicioExpediente = dados.dataHora().withHour(6);
         LocalDateTime fimExpediente = dados.dataHora().withHour(21 - 1);
 
-        boolean reincidencia = repository.existsByAlunoIdAndDataHoraBetween(
+        boolean reincidencia = repository.existsByAlunoIdAndDataHoraBetweenAndMotivoCancelamentoIsNull(
                 dados.idAluno(),
                 inicioExpediente,
                 fimExpediente

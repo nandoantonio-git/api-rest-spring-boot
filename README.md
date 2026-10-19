@@ -92,8 +92,11 @@ Use o botão **Authorize** e informe `Bearer <JWT>` para testar endpoints proteg
 | GET/PUT/DELETE | `/instrutores/{id}` ou `/instrutores` | Detalhamento, atualização e inativação |
 | GET/POST | `/alunos` | Listagem e cadastro de alunos |
 | GET/PUT/DELETE | `/alunos/{id}` ou `/alunos` | Detalhamento, atualização e inativação |
-| POST | `/instrucoes` | Agendamento de instrução |
-| DELETE/PATCH | `/instrucoes/{id}` | Cancelamento, conforme contrato implementado |
+| GET/POST | `/usuarios` | Listagem e cadastro de usuários (perfil ADMIN) |
+| GET/PUT/DELETE | `/usuarios/{id}` ou `/usuarios` | Detalhamento, atualização e inativação (perfil ADMIN) |
+| GET/POST | `/instrucoes` | Listagem das instruções ativas e agendamento |
+| GET | `/instrucoes/{id}` | Detalhamento de instrução |
+| DELETE | `/instrucoes` | Cancelamento de instrução, com motivo no corpo |
 | GET | `/enderecos/{cep}` | Consulta de endereço no ViaCEP |
 | GET | `/health-check` | Verificação de disponibilidade |
 
@@ -120,15 +123,22 @@ O fluxo valida, entre outras regras do projeto:
 - horário em hora inteira;
 - aluno e instrutor existentes.
 
-A migration `V9__add_indexes_for_instruction_scheduling.sql` adiciona índices para consulta e uma restrição única para evitar dupla reserva do mesmo instrutor no mesmo horário.
+A migration `V9__add_indexes_for_instruction_scheduling.sql` adiciona índices para consulta. A partir da `V10`, a restrição de dupla reserva do instrutor é garantida pelos validadores, que ignoram instruções canceladas, permitindo reagendar um horário liberado.
+
+### Cancelamento
+
+O cancelamento exige motivo (`ALUNO_DESISTIU`, `INSTRUTOR_CANCELOU` ou `OUTROS`) e antecedência mínima de 24 horas. A instrução não é apagada: fica registrada com o motivo e deixa de aparecer na listagem e de ocupar o horário.
+
+```bash
+curl -X DELETE -H 'Authorization: Bearer SEU_TOKEN' -H 'Content-Type: application/json' \
+  -d '{ "id_instrucao": 1, "motivo": "ALUNO_DESISTIU" }' \
+  http://localhost:8081/instrucoes
+```
+
+## Usuários
+
+O CRUD de `/usuarios` é restrito ao perfil `ADMIN`. A senha é gravada com BCrypt e nunca é retornada. A exclusão inativa o usuário, que passa a ter o login recusado.
 
 ## CORS
 
 As origens permitidas são definidas por `CORS_ALLOWED_ORIGINS`. O padrão local permite `http://localhost:3000` e `http://localhost:5500`. Em produção, informe somente as origens reais do frontend.
-
-## Observações para a entrega
-
-- Preencher os nomes/RMs restantes dos integrantes antes da publicação.
-- Revisar o contrato de cancelamento com o documento oficial do checkpoint.
-- Confirmar com o professor a data de entrega informada no enunciado.
-- Publicar apenas o código, README e evidências solicitadas; não publicar segredos ou dumps do banco.

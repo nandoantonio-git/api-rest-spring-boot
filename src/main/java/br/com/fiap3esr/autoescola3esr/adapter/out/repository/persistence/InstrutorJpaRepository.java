@@ -26,6 +26,8 @@ public interface InstrutorJpaRepository extends JpaRepository<InstrutorEntity, L
             select a.instrutor.id from Instrucao a
             where
             a.dataHora = :dataHora
+            and
+            a.motivoCancelamento is null
         )
         order by rand()
         limit 1
