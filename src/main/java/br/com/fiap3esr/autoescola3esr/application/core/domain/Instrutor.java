@@ -83,21 +83,13 @@ public class Instrutor {
 
     public void atualizarInformacoes(
             String nome,
-            String email,
             String telefone,
-            Especialidade especialidade,
             Endereco endereco) {
         if(nome != null && !nome.isBlank()) {
             this.nome = nome;
         }
-        if(email != null && !email.isBlank()) {
-            this.email = email;
-        }
         if(telefone != null && !telefone.isBlank()) {
             this.telefone = telefone;
-        }
-        if(especialidade != null) {
-            this.especialidade = especialidade;
         }
         if(endereco != null) {
             this.endereco.atualizarInformacoes(

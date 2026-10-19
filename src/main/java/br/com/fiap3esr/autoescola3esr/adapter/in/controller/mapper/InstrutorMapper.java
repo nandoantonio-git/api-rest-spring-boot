@@ -44,6 +44,7 @@ public class InstrutorMapper {
                 domain.getId(),
                 domain.getNome(),
                 domain.getEmail(),
+                domain.getCnh(),
                 domain.getEspecialidade()
         );
     }

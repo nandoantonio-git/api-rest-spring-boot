@@ -21,11 +21,12 @@ class DomainEntitiesTest {
     void alunoAtualizaInformacoesEExcluiPorInativacao() {
         Aluno aluno = new Aluno(null, "Ana", "ana@email.com", "11999999999", "12345678901", endereco(), true);
 
-        aluno.atualizarInformacoes("Ana Silva", "ana.silva@email.com", "11888888888", endereco());
+        aluno.atualizarInformacoes("Ana Silva", "11888888888", endereco());
         aluno.excluir();
 
         assertThat(aluno.getNome()).isEqualTo("Ana Silva");
-        assertThat(aluno.getEmail()).isEqualTo("ana.silva@email.com");
+        assertThat(aluno.getTelefone()).isEqualTo("11888888888");
+        assertThat(aluno.getEmail()).isEqualTo("ana@email.com");
         assertThat(aluno.isAtivo()).isFalse();
     }
 

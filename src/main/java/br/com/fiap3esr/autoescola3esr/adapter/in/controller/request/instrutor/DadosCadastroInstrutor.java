@@ -26,6 +26,7 @@ public record DadosCadastroInstrutor(
         @NotNull
         Especialidade especialidade,
 
+        @NotNull
         @Valid
         DadosEndereco endereco) {
 }

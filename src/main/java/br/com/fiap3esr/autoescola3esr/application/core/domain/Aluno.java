@@ -26,9 +26,8 @@ public class Aluno {
     private Endereco endereco;
     private boolean ativo = true;
 
-    public void atualizarInformacoes(String nome, String email, String telefone, Endereco endereco) {
+    public void atualizarInformacoes(String nome, String telefone, Endereco endereco) {
         if (nome != null && !nome.isBlank()) this.nome = nome;
-        if (email != null && !email.isBlank()) this.email = email;
         if (telefone != null && !telefone.isBlank()) this.telefone = telefone;
         if (endereco != null) {
             this.endereco.atualizarInformacoes(

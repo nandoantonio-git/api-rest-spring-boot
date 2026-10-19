@@ -113,15 +113,23 @@ O client normaliza o CEP, aplica timeout de conexão/leitura, trata CEP inválid
 
 ## Regras de agendamento
 
-O fluxo valida, entre outras regras do projeto:
+O agendamento valida:
 
-- instrutor ativo;
-- conflito de horário do instrutor;
-- horário de funcionamento;
-- antecedência mínima;
-- limite diário do aluno;
-- horário em hora inteira;
-- aluno e instrutor existentes.
+- horário de funcionamento: segunda a sábado, das 06:00 às 21:00 (instruções de 1 hora, com início até 20:00);
+- horário em hora inteira (ex.: 09:00, 13:00);
+- antecedência mínima de 30 minutos;
+- aluno e instrutor existentes e ativos;
+- no máximo duas instruções por dia para o mesmo aluno;
+- instrutor sem outra instrução na mesma data/hora;
+- instrutor opcional: se não for informado, o sistema escolhe aleatoriamente um instrutor disponível da especialidade informada.
+
+## Regras de cadastro
+
+- Instrutor: nome, e-mail, telefone, CNH, especialidade (`MOTOS`, `CARROS`, `VANS`, `CAMINHOES`) e endereço completo são obrigatórios; apenas número e complemento do endereço são opcionais.
+- Aluno: nome, e-mail, telefone, CPF e endereço completo são obrigatórios; apenas número e complemento do endereço são opcionais.
+- Listagens ordenadas por nome, paginadas com 10 registros. Instrutores exibem nome, e-mail, CNH e especialidade; alunos exibem nome, e-mail e CPF.
+- Atualização: somente nome, telefone e endereço. Enviar e-mail, CNH ou especialidade (instrutor), ou e-mail ou CPF (aluno), retorna `422`.
+- Exclusão: não apaga os dados, apenas inativa o registro.
 
 A migration `V9__add_indexes_for_instruction_scheduling.sql` adiciona índices para consulta. A partir da `V10`, a restrição de dupla reserva do instrutor é garantida pelos validadores, que ignoram instruções canceladas, permitindo reagendar um horário liberado.
 

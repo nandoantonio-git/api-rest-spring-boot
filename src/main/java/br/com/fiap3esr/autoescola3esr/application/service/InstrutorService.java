@@ -8,6 +8,7 @@ import br.com.fiap3esr.autoescola3esr.adapter.in.controller.response.instrutor.D
 import br.com.fiap3esr.autoescola3esr.application.core.domain.Instrutor;
 import br.com.fiap3esr.autoescola3esr.application.port.out.InstrutorRepository;
 import br.com.fiap3esr.autoescola3esr.exception.type.InstrutorNotFoundException;
+import br.com.fiap3esr.autoescola3esr.exception.type.ValidacaoException;
 import br.com.fiap3esr.autoescola3esr.shared.vo.endereco.EnderecoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,12 +52,13 @@ public class InstrutorService {
                 .findById(dados.id())
                 .orElseThrow(() ->
                         new InstrutorNotFoundException("ID do Instrutor informado não existe!"));
+        if (dados.email() != null || dados.cnh() != null || dados.especialidade() != null) {
+            throw new ValidacaoException("Não é permitido alterar o e-mail, a CNH ou a especialidade do instrutor!");
+        }
         instrutor.atualizarInformacoes(
                 dados.nome(),
-                dados.email(),
                 dados.telefone(),
-                dados.especialidade(),
-                enderecoMapper.toVo(dados.endereco())
+                dados.endereco() == null ? null : enderecoMapper.toVo(dados.endereco())
         );
         Instrutor saved = repository.save(instrutor);
         return mapper.toDetails(saved);

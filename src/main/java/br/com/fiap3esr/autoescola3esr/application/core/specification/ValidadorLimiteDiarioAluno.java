@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 
 @Component
 public class ValidadorLimiteDiarioAluno implements ValidadorAgendamento {
+    private static final int LIMITE_DIARIO = 2;
+
     @Autowired
     private InstrucaoRepository repository;
 
@@ -19,14 +21,14 @@ public class ValidadorLimiteDiarioAluno implements ValidadorAgendamento {
         LocalDateTime inicioExpediente = dados.dataHora().withHour(6);
         LocalDateTime fimExpediente = dados.dataHora().withHour(21 - 1);
 
-        boolean reincidencia = repository.existsByAlunoIdAndDataHoraBetweenAndMotivoCancelamentoIsNull(
+        long instrucoesNoDia = repository.countByAlunoIdAndDataHoraBetweenAndMotivoCancelamentoIsNull(
                 dados.idAluno(),
                 inicioExpediente,
                 fimExpediente
         );
 
-        if (reincidencia) {
-            throw new ValidacaoException("Permitido apenas o agendamento de uma instrução diária por aluno!");
+        if (instrucoesNoDia >= LIMITE_DIARIO) {
+            throw new ValidacaoException("Permitido o agendamento de no máximo duas instruções diárias por aluno!");
         }
     }
 }

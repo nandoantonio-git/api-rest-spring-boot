@@ -8,6 +8,7 @@ import br.com.fiap3esr.autoescola3esr.adapter.in.controller.response.aluno.Dados
 import br.com.fiap3esr.autoescola3esr.application.core.domain.Aluno;
 import br.com.fiap3esr.autoescola3esr.application.port.out.AlunoRepository;
 import br.com.fiap3esr.autoescola3esr.exception.type.AlunoNotFoundException;
+import br.com.fiap3esr.autoescola3esr.exception.type.ValidacaoException;
 import br.com.fiap3esr.autoescola3esr.shared.vo.endereco.EnderecoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,10 @@ public class AlunoService {
     @Transactional
     public DadosDetalhamentoAluno atualizar(DadosAtualicaoAluno dados) {
         Aluno aluno = buscar(dados.id());
-        aluno.atualizarInformacoes(dados.nome(), dados.email(), dados.telefone(),
+        if (dados.email() != null || dados.cpf() != null) {
+            throw new ValidacaoException("Não é permitido alterar o e-mail ou o CPF do aluno!");
+        }
+        aluno.atualizarInformacoes(dados.nome(), dados.telefone(),
                 dados.endereco() == null ? null : enderecoMapper.toVo(dados.endereco()));
         return mapper.toDetails(repository.save(aluno));
     }
