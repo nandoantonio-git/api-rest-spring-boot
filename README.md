@@ -5,10 +5,6 @@ API REST para gerenciamento de uma autoescola, com cadastro de instrutores, alun
 ## Integrantes
 
 - Fernando Luiz Silva Antonio — RM555201
-- [Preencher nome e RM do integrante 2]
-- [Preencher nome e RM do integrante 3]
-- [Preencher nome e RM do integrante 4]
-- [Preencher nome e RM do integrante 5]
 
 ## Tecnologias
 
