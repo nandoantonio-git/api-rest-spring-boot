@@ -6,6 +6,8 @@ import br.com.fiap3esr.autoescola3esr.shared.vo.endereco.Endereco;
 import br.com.fiap3esr.autoescola3esr.shared.vo.enumeration.Especialidade;
 import br.com.fiap3esr.autoescola3esr.application.core.domain.Instrutor;
 import br.com.fiap3esr.autoescola3esr.application.port.out.InstrutorRepository;
+import br.com.fiap3esr.autoescola3esr.adapter.out.repository.InstrutorRepositoryImpl;
+import br.com.fiap3esr.autoescola3esr.adapter.out.repository.mapper.InstrutorEntityMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Import;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -23,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
+@Import({InstrutorRepositoryImpl.class, InstrutorEntityMapper.class})
 public class InstrutorRepositoryTest {
     @Autowired
     InstrutorRepository repository;

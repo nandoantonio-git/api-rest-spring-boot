@@ -17,12 +17,11 @@ public class ViaCepClient implements EnderecoService {
     private final RestClient restClient;
 
     @Autowired
-    public ViaCepClient(RestClient.Builder builder,
-                        @Value("${app.external.viacep.base-url:https://viacep.com.br}") String baseUrl) {
+    public ViaCepClient(@Value("${app.external.viacep.base-url:https://viacep.com.br}") String baseUrl) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(Duration.ofSeconds(3));
         requestFactory.setReadTimeout(Duration.ofSeconds(3));
-        this.restClient = builder
+        this.restClient = RestClient.builder()
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();

@@ -20,9 +20,9 @@ class ViaCepClientTest {
 
     @BeforeEach
     void setUp() {
-        RestClient.Builder builder = RestClient.builder();
+        RestClient.Builder builder = RestClient.builder().baseUrl("http://viacep.test");
         server = MockRestServiceServer.bindTo(builder).build();
-        client = new ViaCepClient(builder.baseUrl("http://viacep.test").build());
+        client = new ViaCepClient(builder.build());
     }
 
     @Test
